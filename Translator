@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI English Translator</title>
+
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg,#0f172a,#1e293b);
+      color:white;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .container{
+      width:90%;
+      max-width:500px;
+      background:#111827;
+      padding:25px;
+      border-radius:20px;
+      box-shadow:0 0 20px rgba(0,0,0,0.5);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+      color:#38bdf8;
+    }
+
+    textarea{
+      width:100%;
+      height:120px;
+      border:none;
+      outline:none;
+      border-radius:10px;
+      padding:15px;
+      font-size:16px;
+      resize:none;
+      background:#1e293b;
+      color:white;
+    }
+
+    select{
+      width:100%;
+      padding:12px;
+      margin-top:15px;
+      border:none;
+      border-radius:10px;
+      background:#334155;
+      color:white;
+      font-size:16px;
+    }
+
+    button{
+      width:100%;
+      padding:14px;
+      margin-top:20px;
+      border:none;
+      border-radius:10px;
+      background:#0ea5e9;
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      background:#0284c7;
+    }
+
+    .output{
+      margin-top:20px;
+      padding:15px;
+      background:#1e293b;
+      border-radius:10px;
+      min-height:80px;
+      font-size:18px;
+    }
+
+    .note{
+      margin-top:15px;
+      font-size:13px;
+      color:#94a3b8;
+      text-align:center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>AI Translator</h1>
+
+    <textarea id="inputText" placeholder="Write anything here..."></textarea>
+
+    <select id="language">
+      <option value="hi">Hindi</option>
+      <option value="en">English</option>
+      <option value="fr">French</option>
+      <option value="es">Spanish</option>
+      <option value="de">German</option>
+      <option value="ja">Japanese</option>
+    </select>
+
+    <button onclick="translateText()">Translate</button>
+
+    <div class="output" id="output">
+      Translation will appear here...
+    </div>
+
+    <div class="note">
+      Uses Google Translate API
+    </div>
+  </div>
+
+<script>
+
+async function translateText(){
+
+  let text = document.getElementById("inputText").value;
+  let targetLang = document.getElementById("language").value;
+
+  if(text.trim() === ""){
+    alert("Please enter text");
+    return;
+  }
+
+  document.getElementById("output").innerHTML = "Translating...";
+
+  try{
+
+    let url =
+    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+
+    let response = await fetch(url);
+
+    let data = await response.json();
+
+    let translated = data[0][0][0];
+
+    document.getElementById("output").innerHTML = translated;
+
+  }catch(error){
+
+    document.getElementById("output").innerHTML =
+    "Translation failed.";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
